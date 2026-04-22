@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>Homenagem | Gigio ✨ BTS & Jungkook</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0a0a0f;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            color: #f0f0f0;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        :root {
+            --deep-purple: #2e1a47;
+            --soft-purple: #6a3e9e;
+            --gold: #d4af37;
+            --gold-light: #f5e2a1;
+            --black-bg: #050508;
+            --card-bg: #111116;
+        }
+
+        section {
+            min-height: 100vh;
+            width: 100%;
+            padding: 3rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--black-bg);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .cursive {
+            font-family: 'Dancing Script', 'Snell Roundhand', 'Apple Chancery', cursive;
+            font-weight: 500;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            background: radial-gradient(circle at 20% 30%, #130b1f, #020102);
+        }
+        .hero h1 {
+            font-size: clamp(2.6rem, 12vw, 4.8rem);
+            background: linear-gradient(135deg, #ffffff, #d9b48b, #c6a0ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            font-family: 'Dancing Script', cursive;
+            color: var(--gold-light);
+            border-top: 1px solid rgba(212, 175, 55, 0.4);
+            display: inline-block;
+            padding-top: 0.8rem;
+        }
+
+        /* Cards de música */
+        .cards-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .music-card {
+            background: var(--card-bg);
+            width: 260px;
+            border-radius: 28px;
+            padding: 1rem 1rem 1.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.5);
+        }
+        .music-card:active {
+            transform: scale(0.98);
+        }
+        .album-img {
+            width: 100%;
+            border-radius: 20px;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            background: #2a1e3a;
+            margin-bottom: 1rem;
+            border: 1px solid var(--gold);
+        }
+        .music-card h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem 0 0.2rem;
+            color: white;
+        }
+        .music-card p {
+            color: var(--gold);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Modal de música com layout: card à esquerda, letra à direita */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.96);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-container {
+            background: var(--card-bg);
+            width: 95%;
+            max-width: 1100px;
+            max-height: 90vh;
+            border-radius: 32px;
+            border: 1px solid var(--gold);
+            padding: 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(212,175,55,0.2);
+        }
+        /* Card lado esquerdo */
+        .modal-left-card {
+            flex: 1.2;
+            min-width: 240px;
+            background: #0c0a14;
+            border-radius: 28px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            align-self: center;
+        }
+        .modal-left-card .album-img {
+            width: 80%;
+            margin: 0 auto 1rem;
+        }
+        .modal-left-card h3 {
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        /* Letra lado direito */
+        .modal-lyrics {
+            flex: 2;
+            min-width: 260px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 28px;
+            padding: 1.2rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .modal-lyrics h4 {
+            color: var(--gold);
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--gold);
+            display: inline-block;
+        }
+        .modal-lyrics p {
+            white-space: pre-line;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: #e6e2f0;
+        }
+        .back-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            color: var(--gold);
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: 0.1s;
+        }
+        .back-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* Botões emoções */
+        .emotions-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.2rem;
+            margin: 2rem 0 2.5rem;
+        }
+        .emotion-btn {
+            background: linear-gradient(145deg, #231b32, #140e1f);
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            padding: 0.9rem 1.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 60px;
+            color: #f0eef7;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-family: inherit;
+        }
+        .emotion-btn:active {
+            transform: scale(0.96);
+            background: var(--soft-purple);
+        }
+        .mini-message {
+            margin-top: 3rem;
+            padding: 2rem 1rem;
+            text-align: center;
+            font-size: 1.2rem;
+            background: rgba(46, 26, 71, 0.3);
+            border-radius: 48px;
+            border-left: 4px solid var(--gold);
+            font-family: 'Dancing Script', cursive;
+            color: #f2e6d5;
+            line-height: 1.5;
+        }
+
+        /* Tela de emoção (overlay) */
+        .emotion-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 2, 7, 0.98);
+            backdrop-filter: blur(12px);
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.25s ease;
+        }
+        .emotion-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .emotion-content {
+            background: var(--card-bg);
+            max-width: 550px;
+            width: 100%;
+            border-radius: 40px;
+            padding: 2rem 1.8rem;
+            border: 1px solid var(--gold);
+            position: relative;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.6);
+        }
+        .emotion-content .back-btn-em {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.5);
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--gold);
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .emotion-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            text-align: center;
+            margin: 0.8rem 0 1.5rem;
+            color: var(--gold-light);
+        }
+        .emotion-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #ece9f0;
+            white-space: pre-line;
+        }
+
+        /* curiosidades e fotos BTS */
+        .curiosidades-fotos { background: #08070e; }
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-left: 4px solid var(--gold);
+            padding-left: 1rem;
+        }
+        .curiosidades-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        .curio-card {
+            background: #12101c;
+            padding: 1rem 1.5rem;
+            border-radius: 28px;
+            max-width: 280px;
+            border-right: 2px solid var(--gold);
+        }
+        .fotos-bts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .foto-bts {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 24px;
+            border: 1px solid var(--gold);
+        }
+        @media (max-width: 700px) {
+            .foto-bts { width: 100px; height: 100px; }
+            .modal-container { flex-direction: column; max-height: 85vh; }
+            .modal-left-card { width: 100%; }
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #6a6a7a;
+            background: #020105;
+        }
+        .gold-border { border-bottom: 2px solid var(--gold); width: 80px; margin: 0.5rem auto; }
+        button { background: none; border: none; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- SESSÃO 1 - TELA INICIAL -->
+    <section class="hero">
+        <div class="container">
+            <h1>feliz aniversário, gigio!</h1>
+            <p>Feliz aniversário, meu amor!!! fiz esse site pra você com muito carinho e amor, pra te lembrar do tanto que você é amada e especial. Te desejo tudo do melhor e do mais lindo, do jeitinho que você merece. Sinto muito orgulho de você, por você ser tão esforçada, dedicada, simplesmente não consigo não te amar. Você é a causa de eu sentir um dos sentimentos mais lindos que é o amor. Você é a responsável pelo meu rosto ficar vermelho, pelo meu sorriso bobo, pela minha respiração falhar, pelo meu coração errar batidas, tudo isso só existindo. Queria poder ir lá no céu e buscar as estrelas mais brilhantes só pra fazer você sorrir, mas eu só tenho 16 anos e não posso te dar tudo ainda... Mas ainda quero ser a mulher que vai te dar tudo e te levar pra conhecer cada cantinho do mundo. Você é meu bem querer. aproveite seu dia, menina bonita. espero que ele seja tão brilhante e lindo assim como você.</p>
+            <div class="gold-border" style="margin-top: 2rem;"></div>
+        </div>
+    </section>
+
+    <!-- SESSÃO 2 - CARDS DAS MÚSICAS ESPECÍFICAS -->
+    <section id="albuns">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center;">🎧 Músicas especiais 🎧</h2>
+            <div class="cards-grid" id="cards-container"></div>
+        </div>
+    </section>
+
+    <!-- SESSÃO 3 - BOTÕES EMOÇÕES + TEXTO FINAL -->
+    <section id="emocoes">
+        <div class="container">
+            <h2 class="section-title cursive" style="text-align: center; font-size: 2rem;">abra quando estiver se sentindo...</h2>
+            <div class="emotions-grid" id="botoes-emocoes"></div>
+            <div class="mini-message" id="mensagem-final">
+                ""
+            </div>
+        </div>
+    </section>
+
+    <!-- SESSÃO EXTRA: curiosidades e fotos do BTS -->
+    <section id="curiosidades-bts" class="curiosidades-fotos">
+        <div class="container">
+            <h2 class="section-title">Curiosidades sobre o BTS </h2>
+            <div class="curiosidades-grid" id="curiosidades-list"></div>
+            <h3 class="cursive" style="text-align: center; margin-top: 2rem;"> Fotos do grupo</h3>
+            <div class="fotos-bts" id="fotos-bts-container"></div>
+        </div>
+    </section>
+
+    <!-- MODAL PARA MÚSICA -->
+    <div id="modalMusic" class="modal-overlay">
+        <div class="modal-container">
+            <button class="back-btn" id="closeModalBtn">←</button>
+            <div class="modal-left-card">
+                <img id="modalAlbumImg" class="album-img" src="" alt="capa do álbum">
+                <h3 id="modalMusicName"></h3>
+                <p id="modalArtistName"></p>
+            </div>
+            <div class="modal-lyrics">
+                <h4> Letra completa</h4>
+                <p id="modalLyricsText"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- OVERLAY PARA EMOÇÕES -->
+    <div id="emotionOverlay" class="emotion-overlay">
+        <div class="emotion-content">
+            <button class="back-btn-em" id="closeEmotionBtn">←</button>
+            <div class="emotion-title" id="emotionTitle"></div>
+            <div class="emotion-text" id="emotionText"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // IMAGENS REAIS E FUNCIONAIS para as músicas
+            const musicasData = [
+                {
+                    nome: "Closer to You",
+                    artista: "Jung Kook",
+                    capa: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Jung_Kook_-_Golden.png/220px-Jung_Kook_-_Golden.png",
+                    letra: "[Verso 1]\nI've been waiting for a sign\nSomething pulling me to you\nEvery time you cross my mind\nI just don't know what to do\n\n[Pré-Refrão]\nYou're the light in the dark\nYou're the beat in my heart\n\n[Refrão]\nI wanna get closer to you\nEvery step, every breath, every moment\nCloser to you\nNothing in this world can break us apart\nI'm running to where you are\nCloser to you\n\n[Ponte]\nAnd I know we've got something real\nEvery single night I feel\nYou're the one I choose\nI just wanna get closer to you.\n\n✨ Uma música que aquece o coração, assim como você aquece o meu."
+                },
+                {
+                    nome: "Love is not over",
+                    artista: "BTS",
+                    capa: "https://ibighit.com/bts/images/discography/discography_young_forever/album-cover_YF.jpg",
+                    letra: "[Verso 1: Jimin]\nEven if the season passes\nEven if the cold wind blows\nYou're still my spring\n\n[Refrão: Jungkook]\nLove is not over\nThis love is not over\nThough the flower withers, my heart is still blooming\nLove is not over\n\n[Verso 2: V]\nMemories linger like a shadow\nBut I don't want to let you go\n\n[Ponte: Jin]\nEven if time separates us\nI'll find you again\n\n[Outro]\nBecause my love is not over\nThis song is for you, always.\n\n💜 O amor nunca acaba, assim como o que sinto por você."
+                },
+                {
+                    nome: "Standing Next to You",
+                    artista: "Jung Kook",
+                    capa: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Jung_Kook_-_Golden.png/220px-Jung_Kook_-_Golden.png",
+                    letra: "[Verso 1]\nStanding next to you, I feel alive\nLike a fire burning through the night\n\n[Pré-Refrão]\nYou and me against the world\nI'll never let you fall\n\n[Refrão]\nStanding next to you, there's nothing I can't do\nEvery step I take is leading me to you\nStanding next to you, I found my breakthrough\nAll my dreams come true when I'm next to you\n\n[Ponte]\nThrough the highs and lows\nWherever this goes\nI'll be standing next to you\n\n[Outro]\nYeah, standing next to you.\n\n🎤 Prometo estar sempre ao seu lado, não importa o que aconteça."
+                }
+            ];
+
+            const fallbackImg = "https://via.placeholder.com/300x300/2e1a47/d4af37?text=BTS+Jungkook";
+
+            // Renderizar cards
+            const containerCards = document.getElementById('cards-container');
+            function renderCards() {
+                containerCards.innerHTML = '';
+                musicasData.forEach((musica, idx) => {
+                    const card = document.createElement('div');
+                    card.classList.add('music-card');
+                    const img = document.createElement('img');
+                    img.classList.add('album-img');
+                    img.src = musica.capa;
+                    img.alt = `Capa ${musica.nome}`;
+                    img.onerror = function() { this.src = fallbackImg; };
+                    const title = document.createElement('h3');
+                    title.textContent = musica.nome;
+                    const artistP = document.createElement('p');
+                    artistP.textContent = musica.artista;
+                    card.appendChild(img);
+                    card.appendChild(title);
+                    card.appendChild(artistP);
+                    card.addEventListener('click', () => abrirModalMusica(idx));
+                    containerCards.appendChild(card);
+                });
+            }
+
+            // Modal música
+            const modalOverlay = document.getElementById('modalMusic');
+            const modalAlbumImg = document.getElementById('modalAlbumImg');
+            const modalMusicNameSpan = document.getElementById('modalMusicName');
+            const modalArtistSpan = document.getElementById('modalArtistName');
+            const modalLyricsText = document.getElementById('modalLyricsText');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+
+            function abrirModalMusica(index) {
+                const musica = musicasData[index];
+                modalAlbumImg.src = musica.capa;
+                modalAlbumImg.onerror = function() { this.src = fallbackImg; };
+                modalMusicNameSpan.textContent = musica.nome;
+                modalArtistSpan.textContent = musica.artista;
+                modalLyricsText.textContent = musica.letra;
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function fecharModalMusica() {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            closeModalBtn.addEventListener('click', fecharModalMusica);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) fecharModalMusica();
+            });
+            const modalContainer = document.querySelector('.modal-container');
+            if (modalContainer) modalContainer.addEventListener('click', (e) => e.stopPropagation());
+
+            // TEXTOS DAS EMOÇÕES (personalizados por você)
+            const emotionTexts = {
+                triste: "oi linda, não sei o motivo da sua tristeza, mas se você clicou nesse botão é porque tem algo acontecendo. quero que se lembre de que estou aqui pra você e por você, independente das suas emoções. Pode acontecer de você pedir espaço, e eu sempre irei respeitar seu espaço, meu amor. Mas lembre-se sempre de quem limparia suas lágrimas. Você é muito especial, linda, autentica, divertida, e te peço pra nunca perder essa sua essencia que tanto me encanta.",
+                
+                feliz: "Que ótimo te ver feliz, boneca! amo ver você sorrindo e sua risada. por favor me manda mensagem me contando o que houve pra eu ficar feliz junto contigo, sua felicidade é a minha!!!",
+                
+                cansada: "Oi meu amor, soube que você ta cansada... as vezes a gente precisa de um tempinho pra nós mesmos pra poder respirar um pouco e se acalmar, quanto a isso, que tal tirar um tempo pra relaxar enquanto faz alguma coisinha que você gosta? faz assim, toma aquele banho beeemmm quentinho, vista seu pijama mais confortável, coma algum doce que você goste de comer enquanto assiste alguma coisinha legal que te distraia um pouco desse cansaço todo, o que acha, ein? eu te adoro, linda. espero que consiga relaxar!!!",
+                
+                desanimada: "Ei linda, e esse desanimo ein? Não sei o motivo do seu desanimo, mas quero te lembrar que te admiro muito, meio que admiro tudo sobre você, cada detalhe seu parece uma constelação inteira pra mim. Você é determinada, forte, mas não precisa ser forte sozinha ok? só se você quiser um espacinho pra você. O que tiver te deixando desanimada vai passar, ta bom? porque você é forte e linda, e eu te adoro.",
+                
+                "com raiva": "Oi linda, sei que se você deve estar com raiva. Mas oh, ta tudo bem ficar com raiva, mas fico preocupada das coisas ficarem muito pesadas pra você. Queria dizer que te entendo, independente da situação. Espero que esse momento ruim passe logo, tá bom? Não guarda pra voce, pode chorar, gritar, socar, o importante é você se sentir mais leve no final. Tô aqui do seu ladinho, fica bem!!! Você é a minha princesa favorita. "
+            };
+
+            const botoesContainer = document.getElementById('botoes-emocoes');
+            const emotionsList = ["triste", "feliz", "cansada", "desanimada", "com raiva"];
+            const emotionOverlayDiv = document.getElementById('emotionOverlay');
+            const emotionTitleSpan = document.getElementById('emotionTitle');
+            const emotionTextDiv = document.getElementById('emotionText');
+            const closeEmotionBtn = document.getElementById('closeEmotionBtn');
+
+            function abrirEmocao(emoKey) {
+                let tituloDisplay = emoKey.charAt(0).toUpperCase() + emoKey.slice(1);
+                if (emoKey === "com raiva") tituloDisplay = "Com Raiva";
+                emotionTitleSpan.textContent = tituloDisplay;
+                emotionTextDiv.textContent = emotionTexts[emoKey];
+                emotionOverlayDiv.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function fecharEmocao() {
+                emotionOverlayDiv.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            closeEmotionBtn.addEventListener('click', fecharEmocao);
+            emotionOverlayDiv.addEventListener('click', (e) => {
+                if (e.target === emotionOverlayDiv) fecharEmocao();
+            });
+            
+            const emotionContent = document.querySelector('.emotion-content');
+            if (emotionContent) emotionContent.addEventListener('click', (e) => e.stopPropagation());
+
+            // Criar botões de emoção
+            emotionsList.forEach(emo => {
+                const btn = document.createElement('button');
+                btn.classList.add('emotion-btn');
+                let label = emo === "com raiva" ? "Com Raiva" : emo.charAt(0).toUpperCase() + emo.slice(1);
+                btn.textContent = label;
+                btn.addEventListener('click', () => abrirEmocao(emo));
+                botoesContainer.appendChild(btn);
+            });
+
+            // CURIOSIDADES BTS (funcionando)
+            const curiosidades = [
+                " O BTS já se apresentou na ONU e discursou sobre amor próprio e juventude.",
+                " 'Dynamite' foi o primeiro single do grupo a alcançar #1 na Billboard Hot 100.",
+                " Todos os membros têm nomes artísticos: RM, Jin, SUGA, j-hope, Jimin, V e Jungkook.",
+                " O fandom ARMY é conhecido mundialmente por ações de caridade e apoio incondicional.",
+                " BTS venceu como 'Artista do Ano' no MAMA e Billboard Music Awards várias vezes.",
+                " 'Love Yourself: Answer' é um dos álbuns mais premiados da história do K-pop.",
+                " Jungkook (nosso golden maknae) nasceu em 1º de setembro de 1997!"
+            ];
+            
+            const curiosidadesDiv = document.getElementById('curiosidades-list');
+            curiosidades.forEach(cur => {
+                const div = document.createElement('div');
+                div.classList.add('curio-card');
+                div.innerHTML = `<p style="color:#e1d9ff">✨ ${cur}</p>`;
+                curiosidadesDiv.appendChild(div);
+            });
+
+            // Fotos do BTS (links funcionais)
+            const fotos = [
+                "https://images5.alphacoders.com/109/1091390.jpg",
+                "https://wallpapers.com/images/hd/bts-group-photo-2021-zk2hyk3afvdx1j9i.jpg",
+                "https://rollingstone.com.br/media/_versions/2022/06/bts-album-anthology-proof-foto-reproducao-twitter_bts_bighit.jpg",
+                "https://i.pinimg.com/736x/5c/3f/6a/5c3f6a2e1b4f9a7c8d3e0b2a1c5f6d7e.jpg"
+            ];
+            
+            const fotosContainer = document.getElementById('fotos-bts-container');
+            fotos.forEach((url, i) => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = `BTS ${i+1}`;
+                img.classList.add('foto-bts');
+                img.onerror = function() { 
+                    this.src = "https://via.placeholder.com/140x140/2e1a47/d4af37?text=BTS+💜";
+                };
+                fotosContainer.appendChild(img);
+            });
+
+            // Prevenir scroll do body quando modais abertos
+            function fixBodyScroll() {
+                const modal = document.getElementById('modalMusic');
+                const emotionModal = document.getElementById('emotionOverlay');
+                const observer = new MutationObserver(() => {
+                    if (modal.classList.contains('active') || emotionModal.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                        document.body.style.position = 'fixed';
+                        document.body.style.width = '100%';
+                    } else {
+                        document.body.style.overflow = '';
+                        document.body.style.position = '';
+                        document.body.style.width = '';
+                    }
+                });
+                observer.observe(modal, { attributes: true });
+                observer.observe(emotionModal, { attributes: true });
+            }
+            fixBodyScroll();
+
+            // Inicializar tudo
+            renderCards();
+            console.log("com muito amor e carinho, bi.");
+        })();
+    </script>
+    <footer>com muito amor e carinho, bi.</footer>
+</body>
+</html>
